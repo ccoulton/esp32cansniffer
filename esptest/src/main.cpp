@@ -1,15 +1,16 @@
 #include <Arduino.h>
 
 #include "canStuff.h"
-#include "bleStuff.h"
+//#include "bleStuff.h"
 
 void setup() {
   Serial.begin(115200);
   while(!Serial) delay(10);
   canInit();
-  bleInit();
+  //bleInit();
 }
 
 void loop() {
-  bleloop();
+  //bleloop();
+  canLoop();
 }

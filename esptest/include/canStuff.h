@@ -13,43 +13,26 @@
 Adafruit_MCP2515 mcp(CS_PIN, MOSI_PIN, MISO_PIN, SCK_PIN);
 
 void canRxCallback(int packetSize) {
-    // received a packet
-    Serial.print("Received ");
-
-    if (mcp.packetExtended()) {
-        Serial.print("extended ");
+    bool rtrFlag = mcp.packetRtr();
+    int dlc = (rtrFlag) ? mcp.packetDlc() : packetSize;
+    Serial.printf("%#X %u %u ", 
+        mcp.packetId(), rtrFlag, dlc);
+    while (mcp.available() && !rtrFlag) {
+        Serial.printf("0x%02X:", mcp.read());
     }
-
-    if (mcp.packetRtr()) {
-        // Remote transmission request, packet contains no data
-        Serial.print("RTR ");
-    }
-
-    Serial.print("packet with id 0x");
-    Serial.print(mcp.packetId(), HEX);
-
-    if (mcp.packetRtr()) {
-        Serial.print(" and requested length ");
-        Serial.println(mcp.packetDlc());
-    } else {
-        Serial.print(" and length ");
-        Serial.println(packetSize);
-
-        // only print packet data for non-RTR packets
-        while (mcp.available()) {
-        Serial.print(mcp.read(), HEX);
-        }
-        Serial.println();
-    }
-
     Serial.println();
+}
+
+void canLoop() {
+    int packetSize = mcp.parsePacket();
+    if (packetSize) canRxCallback(packetSize);
 }
 
 void canInit() {
     if (!mcp.begin(CAN_BAUD)) {
         Serial.println("CAN Device not init.");
         while(1) delay(10); // Inf loop to not segfault.
-      }
+    }
     mcp.onReceive(INT_PIN, canRxCallback);
     Serial.println("MCP2515 found starting.");
 }
