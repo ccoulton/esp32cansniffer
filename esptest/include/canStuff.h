@@ -15,11 +15,8 @@ Adafruit_MCP2515 mcp(CS_PIN, MOSI_PIN, MISO_PIN, SCK_PIN);
 void canRxCallback(int packetSize) {
     bool rtrFlag = mcp.packetRtr();
     int dlc = (rtrFlag) ? mcp.packetDlc() : packetSize;
-    Serial.printf("%#X %u %u ", 
-        mcp.packetId(), rtrFlag, dlc);
-    while (mcp.available() && !rtrFlag) {
-        Serial.printf("0x%02X:", mcp.read());
-    }
+    Serial.printf("%#X %u %u ", mcp.packetId(), rtrFlag, dlc);
+    while (mcp.available() && !rtrFlag) Serial.printf("0x%02X:", mcp.read());
     Serial.println();
 }
 
