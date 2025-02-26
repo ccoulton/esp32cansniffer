@@ -6,15 +6,15 @@
 #include "canStuff.h"  //21.5
 #include "bleStuff.h"  //65.5
 //#include "wifiStuff.h" //34.7
-//#include "sdStuff.h" //broken.
+#include "sdStuff.h" //broken.
 
 void setup() {
   Serial.begin(115200);
-  while(!Serial) delay(10);
+  while(!Serial) yield();
   canInit();
   bleInit();
   //wifiInit();
-  //sdInit();
+  sdInit();
 }
 
 void loop() {
