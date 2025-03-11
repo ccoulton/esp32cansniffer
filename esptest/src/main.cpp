@@ -1,25 +1,30 @@
 #include <Arduino.h>
 
-// Debugging pins gpio14:tms, gpio13:tck, gpio15:tdo, gpio12:tdi
+// Debugging pins gpio16:tms:t6, gpio14:tck:t4, gpio13:tdo:t3, gpio15:tdi:t5
 // test mode state, return test clock, test data out, test data in
 
-#include "canStuff.h"  //21.5
-#include "bleStuff.h"  //65.5
-//#include "wifiStuff.h" //34.7
-//#include "sdStuff.h" //broken.
+#include "canStuff.h"
+//#include "bleStuff.h"
+//#include "wifiStuff.h"
+#include "sdStuff.h"
+#include "ledStuff.h"
+#include "rtcStuff.h"
 
 void setup() {
   Serial.begin(115200);
   while(!Serial) delay(10);
-  canInit();
-  bleInit();
+  ledSetup();
+  rtcSetup();
+  //canInit();
+  //bleInit();
   //wifiInit();
   //sdInit();
 }
 
 void loop() {
-  canLoop();
-  bleloop();
+  ledLoop();
+  //canLoop();
+  //bleloop();
   //wifiLoop();
   //sdLoop();
 }
