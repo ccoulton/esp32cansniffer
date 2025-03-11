@@ -12,13 +12,13 @@
 
 void setup() {
   Serial.begin(115200);
-  while(!Serial) delay(10);
+  while(!Serial) yield(10);
   ledSetup();
   rtcSetup();
   //canInit();
   //bleInit();
   //wifiInit();
-  //sdInit();
+  sdInit();
 }
 
 void loop() {
